@@ -64,5 +64,9 @@ class FindICIndexEntry(ddosa.DataAnalysis):
             ic_hashe = ast.literal_eval(open(version_fn).read())
 
             return ICIndexEntry(use_hashe=ic_hashe, use_ds=self.ds, use_member_location=member_location)
+
+        return ICIndexEntry(use_hashe="UNDEFINED", use_ds=self.ds, use_member_location=member_location)
+        #else:
+        #    raise Exception("unable for find entry "+repr(self.ds)+" for "+repr(self.input_scw))
             # return DataAnalysis.from_hashe(ic_hashe).get()
 
