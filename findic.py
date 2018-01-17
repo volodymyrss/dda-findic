@@ -63,6 +63,6 @@ class FindICIndexEntry(ddosa.DataAnalysis):
             print("found hashe file at", version_fn)
             ic_hashe = ast.literal_eval(open(version_fn).read())
 
-            return ICIndexEntry(use_hashe=ic_hashe, use_ds=self.ds)
+            return ICIndexEntry(use_hashe=ic_hashe, use_ds=self.ds, use_member_location=member_location)
             # return DataAnalysis.from_hashe(ic_hashe).get()
 
