@@ -61,9 +61,13 @@ class FindICIndexEntry(ddosa.DataAnalysis):
 
         if os.path.exists(version_fn):
             print("found hashe file at", version_fn)
-            ic_hashe = ast.literal_eval(open(version_fn).read())
 
-            return ICIndexEntry(use_hashe=ic_hashe, use_ds=self.ds, use_member_location=member_location)
+            try:
+                ic_hashe = ast.literal_eval(open(version_fn).read())
+
+                return ICIndexEntry(use_hashe=ic_hashe, use_ds=self.ds, use_member_location=member_location)
+            except Exception as e:
+                print("unable to read version file, skipping",e)
 
         return ICIndexEntry(use_hashe="UNDEFINED", use_ds=self.ds, use_member_location=member_location)
         #else:
