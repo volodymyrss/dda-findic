@@ -31,13 +31,17 @@ class ICIndexEntry(ddosa.DataAnalysis):
 class FindICIndexEntry(ddosa.DataAnalysis):
     ds = None
     icversion = 1
-    input_scw = ddosa.ScWData
+ #   input_scw = ddosa.ScWData
     input_ic = ddosa.ICRoot
 
     run_for_hashe = True
 
     def main(self):
-        t1, t2 = self.input_scw.get_t1_t2()
+        if hasattr(self,'input_scw'):
+            t1, t2 = self.input_scw.get_t1_t2()
+        else:
+            t1=5000
+            t2=5000
 
         idxfn = self.input_ic.icroot + "/idx/ic/" + self.ds + "-IDX.fits"
         print("idx:", idxfn)
