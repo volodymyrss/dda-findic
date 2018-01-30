@@ -31,7 +31,7 @@ class ICIndexEntry(ddosa.DataAnalysis):
 class FindICIndexEntry(ddosa.DataAnalysis):
     ds = None
     icversion = 1
- #   input_scw = ddosa.ScWData
+    input_scw = ddosa.ScWData
     input_ic = ddosa.ICRoot
 
     run_for_hashe = True
@@ -47,6 +47,8 @@ class FindICIndexEntry(ddosa.DataAnalysis):
         print("idx:", idxfn)
 
         idx = fits.open(idxfn)[1].data
+
+        print(t1,t2,zip(idx['VSTART'],idx['VSTOP']))
 
         m_on = (idx['VSTART'] < t1) & (idx['VSTOP'] > t2) & (idx['VERSION'] == self.icversion)
         print("found valid:", sum(m_on))
