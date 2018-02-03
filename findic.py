@@ -2,6 +2,7 @@ import os
 
 import astropy.io.fits as fits
 import numpy as np
+from dataanalysis import hashtools
 
 import ast
 import ddosa
@@ -15,10 +16,12 @@ class ICIndexEntry(ddosa.DataAnalysis):
     def get_version(self):
         v = self.get_signature() + "." + self.version + "." + self.ds + "." + da.hashtools.shhash(self.hashe)[:8]
 
+        generalized_hashe=self.hashe
+
         note = dict(
             origin_object=self.__class__.__name__,
             origin_module=__name__,
-            generalized_hash=self.hashe,
+            generalized_hash=generalized_hashe,
             reduced_hash=v,
             handle=v,
         )
@@ -65,14 +68,25 @@ class FindICIndexEntry(ddosa.DataAnalysis):
 
         print("version file", version_fn)
 
+        rev_hashe=ddosa.Revolution(input_revid=self.input_scw.input_scwid.str()[:4]).get_hashe()
+
         if os.path.exists(version_fn):
             print("found hashe file at", version_fn)
 
             try:
                 ic_hashe = ast.literal_eval(open(version_fn).read())
 
+                print("searching",ic_hashe,rev_hashe)
+                if hashtools.find_object(ic_hashe,rev_hashe):
+                    ic_hashe=hashtools.hashe_replace_object(ic_hashe,rev_hashe,'')
+                    print("norev hashe",ic_hashe)
+                else:
+                    print("unable to convert version file")
+
                 return ICIndexEntry(use_hashe=ic_hashe, use_ds=self.ds, use_member_location=member_location)
-            except Exception as e:
+            except IOError as e:
+                print("unable to read version file, skipping",e)
+            except SyntaxError as e:
                 print("unable to read version file, skipping",e)
 
         return ICIndexEntry(use_hashe="UNDEFINED", use_ds=self.ds, use_member_location=member_location)
