@@ -78,8 +78,8 @@ class FindICIndexEntry(ddosa.DataAnalysis):
 
                 print("searching",ic_hashe,rev_hashe)
                 if hashtools.find_object(ic_hashe,rev_hashe):
-                    ic_hashe=hashtools.hashe_replace_object(ic_hashe,rev_hashe,'')
-                    print("norev hashe",ic_hashe)
+                    ic_hashe_norev=hashtools.hashe_replace_object(ic_hashe,rev_hashe,'')
+                    print("norev hashe",ic_hashe_norev)
                 else:
                     print("unable to convert version file")
 
