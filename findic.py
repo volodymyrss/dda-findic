@@ -40,11 +40,13 @@ class FindICIndexEntry(ddosa.DataAnalysis):
     run_for_hashe = True
 
     def main(self):
-        if hasattr(self,'input_scw'):
+        if hasattr(self,'input_scw') and hasattr(self.input_scw,'get_t1_t2'):
             t1, t2 = self.input_scw.get_t1_t2()
+            revid=self.input_scw.input_scwid.str()[:4]
         else:
             t1=5000
             t2=5000
+            revid="None"
 
         idxfn = self.input_ic.icroot + "/idx/ic/" + self.ds + "-IDX.fits"
         print("idx:", idxfn)
@@ -68,7 +70,7 @@ class FindICIndexEntry(ddosa.DataAnalysis):
 
         print("version file", version_fn)
 
-        rev_hashe=ddosa.Revolution(input_revid=self.input_scw.input_scwid.str()[:4]).get_hashe()
+        rev_hashe=ddosa.Revolution(input_revid=revid).get_hashe()
 
         if os.path.exists(version_fn):
             print("found hashe file at", version_fn)
