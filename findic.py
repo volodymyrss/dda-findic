@@ -1,4 +1,5 @@
 import os
+import yaml
 
 import astropy.io.fits as fits
 import numpy as np
@@ -43,16 +44,30 @@ class FindICIndexEntry(ddosa.DataAnalysis):
 
     input_ic = ddosa.ICRoot
 
-    run_for_hashe = True
+ #   run_for_hashe = True
 
-    @property
     def get_member_location(self,scw):
         entry=self.find_entry(scw)
-        return entr
+        return entry['member_location']
+
+    def get_version(self):
+        return self.get_signature()+"."+self.version+"."+self.ic_version
+
+    @property
+    def ic_version(self):
+        icroot=os.environ['CURRENT_IC']
+        ic_version_code=icroot+"/ic_version.yaml"
+
+        if os.path.exists(ic_version_code):
+            ic_version=yaml.load(open(ic_version_code))
+        else:
+            ic_version=dict(version_id=os.path.basename(icroot))
+
+        return ic_version['version_id']
 
     def find_entry(self,scw):
-        t1, t2 = self.input_scw.get_t1_t2()
-        revid=self.input_scw.input_scwid.str()[:4]
+        t1, t2 = scw.get_t1_t2()
+        revid=scw.input_scwid.str()[:4]
 
         idxfn = self.input_ic.icroot + "/idx/ic/" + self.ds + "-IDX.fits"
         print("idx:", idxfn)
@@ -103,7 +118,7 @@ class FindICIndexEntry(ddosa.DataAnalysis):
         return dict(hashe="UNDEFINED", ds=self.ds, member_location=member_location, idx_hash=idx_hash, idxfn=idxfn)
 
     def main(self):
-        entry=self.find_entry()
-        return ICIndexEntry(use_hashe=entry['hashe'], use_ds=entry['ds'], use_member_location=entry['member_location'], use_idx_hash=entry['idx_hash'], use_version_from_index=self.version_from_index)
+        pass
+        #return ICIndexEntry(use_hashe=entry['hashe'], use_ds=entry['ds'], use_member_location=entry['member_location'], use_idx_hash=entry['idx_hash'], use_version_from_index=self.version_from_index)
 
 
