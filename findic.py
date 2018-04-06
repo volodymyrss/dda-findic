@@ -41,19 +41,18 @@ class FindICIndexEntry(ddosa.DataAnalysis):
     icversion = 1
     version_from_index=True
 
-    input_scw = ddosa.ScWData
     input_ic = ddosa.ICRoot
 
     run_for_hashe = True
 
-    def find_entry(self):
-        if hasattr(self,'input_scw') and hasattr(self.input_scw,'get_t1_t2'):
-            t1, t2 = self.input_scw.get_t1_t2()
-            revid=self.input_scw.input_scwid.str()[:4]
-        else:
-            t1=5000
-            t2=5000
-            revid="None"
+    @property
+    def get_member_location(self,scw):
+        entry=self.find_entry(scw)
+        return entr
+
+    def find_entry(self,scw):
+        t1, t2 = self.input_scw.get_t1_t2()
+        revid=self.input_scw.input_scwid.str()[:4]
 
         idxfn = self.input_ic.icroot + "/idx/ic/" + self.ds + "-IDX.fits"
         print("idx:", idxfn)
