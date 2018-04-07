@@ -46,7 +46,7 @@ class FindICIndexEntry(ddosa.DataAnalysis):
 
  #   run_for_hashe = True
 
-    def get_member_location(self,scw):
+    def get_member_location(self,scw=None):
         entry=self.find_entry(scw)
         return entry['member_location']
 
@@ -66,8 +66,13 @@ class FindICIndexEntry(ddosa.DataAnalysis):
         return ic_version['version_id']
 
     def find_entry(self,scw):
-        t1, t2 = scw.get_t1_t2()
-        revid=scw.input_scwid.str()[:4]
+
+        if scw is not None:
+            t1, t2 = scw.get_t1_t2()
+            revid=scw.input_scwid.str()[:4]
+        else:
+            t1,t2=5000,5000
+            revid="0000"
 
         idxfn = self.input_ic.icroot + "/idx/ic/" + self.ds + "-IDX.fits"
         print("idx:", idxfn)
