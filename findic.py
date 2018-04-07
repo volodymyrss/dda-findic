@@ -42,8 +42,6 @@ class FindICIndexEntry(ddosa.DataAnalysis):
     icversion = 1
     version_from_index=True
 
-    input_ic = ddosa.ICRoot
-
  #   run_for_hashe = True
 
     def get_member_location(self,scw=None):
@@ -74,7 +72,8 @@ class FindICIndexEntry(ddosa.DataAnalysis):
             t1,t2=5000,5000
             revid="0000"
 
-        idxfn = self.input_ic.icroot + "/idx/ic/" + self.ds + "-IDX.fits"
+        icroot=os.environ['CURRENT_IC']
+        idxfn = icroot + "/idx/ic/" + self.ds + "-IDX.fits"
         print("idx:", idxfn)
 
         idx_hash=hashtools.shhash(open(idxfn).read())[:8]
