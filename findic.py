@@ -9,6 +9,8 @@ import ast
 import ddosa
 import dataanalysis.core as da
 
+import subprocess
+
 
 class ICIndexEntry(ddosa.DataAnalysis):
     ds = "UNDEFINED"
@@ -39,6 +41,16 @@ class ICIndexEntry(ddosa.DataAnalysis):
 
 class VScW(ddosa.ScWData):
     pass
+
+def converttime(utc):
+    r = subprocess.check_output(["converttime","UTC",utc,""])
+    d={}
+    for l in r.split("\n"):
+        t=re.search("Output Time\((.*?)\): (.*?)$",l,re.S)
+        if t:
+            g=t.groups()
+            d[g[0]]=g[1]
+    return d
 
 class FindICIndexEntry(ddosa.DataAnalysis):
     ds = None
@@ -71,12 +83,14 @@ class FindICIndexEntry(ddosa.DataAnalysis):
     def find_entry(self,scw):
 
         if scw is not None:
-            t1, t2 = scw.get_t1_t2()
+       #     try:
+            scwid=scw.input_scwid.str()
+        #    except AttributeError:
+        #        scwid=str(scw.input_scwid)
 
-            try:
-                revid=scw.input_scwid.str()[:4]
-            except AttributeError:
-                revid=str(scw.input_scwid)[:4]
+            revid=scwid[:4]
+
+            t1, t2 = scw.get_t1_t2()
 
         else:
             t1,t2=5000,5000
