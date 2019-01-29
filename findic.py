@@ -52,17 +52,21 @@ def converttime(utc):
             d[g[0]]=g[1]
     return d
 
+class VTime(ddosa.DataAnalysis):
+    vtime = 6500
+
 class FindICIndexEntry(ddosa.DataAnalysis):
     ds = None
     icversion = 1
     version_from_index=True
 
-    input_vscw=VScW
+    input_vtime=VTime
+ #   input_vscw=VScW
 
  #   run_for_hashe = True
 
     def get_member_location(self,scw=None):
-        entry=self.find_entry(self.input_vscw)
+        entry=self.find_entry()
         return entry['member_location']
 
     def get_version(self):
@@ -80,21 +84,11 @@ class FindICIndexEntry(ddosa.DataAnalysis):
 
         return ic_version['version_id']
 
-    def find_entry(self,scw):
+    def find_entry(self):
 
-        if scw is not None:
-       #     try:
-            scwid=scw.input_scwid.str()
-        #    except AttributeError:
-        #        scwid=str(scw.input_scwid)
-
-            revid=scwid[:4]
-
-            t1, t2 = scw.get_t1_t2()
-
-        else:
-            t1,t2=5000,5000
-            revid="0000"
+        t1 = self.input_vtime.vtime
+        t2 = self.input_vtime.vtime
+        revid="0000"
 
         icroot=os.environ['CURRENT_IC']
         idxfn = icroot + "/idx/ic/" + self.ds + "-IDX.fits"
