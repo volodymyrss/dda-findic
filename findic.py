@@ -60,7 +60,9 @@ class FindICIndexEntry(ddosa.DataAnalysis):
     icversion = 1
     version_from_index=True
 
-    input_vtime=VTime
+    version="fixijd6500"
+
+#    input_vtime=VTime
  #   input_vscw=VScW
 
  #   run_for_hashe = True
@@ -86,8 +88,8 @@ class FindICIndexEntry(ddosa.DataAnalysis):
 
     def find_entry(self):
 
-        t1 = self.input_vtime.vtime
-        t2 = self.input_vtime.vtime
+        t1 = 6500
+        t2 = 6500
         revid="0000"
 
         icroot=os.environ['CURRENT_IC']
