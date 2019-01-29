@@ -37,15 +37,20 @@ class ICIndexEntry(ddosa.DataAnalysis):
 
         return v
 
+class VScW(ddosa.ScWData):
+    pass
+
 class FindICIndexEntry(ddosa.DataAnalysis):
     ds = None
     icversion = 1
     version_from_index=True
 
+    input_vscw=VScW
+
  #   run_for_hashe = True
 
     def get_member_location(self,scw=None):
-        entry=self.find_entry(scw)
+        entry=self.find_entry(self.input_vscw)
         return entry['member_location']
 
     def get_version(self):
