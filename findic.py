@@ -72,7 +72,12 @@ class FindICIndexEntry(ddosa.DataAnalysis):
 
         if scw is not None:
             t1, t2 = scw.get_t1_t2()
-            revid=scw.input_scwid.str()[:4]
+
+            try:
+                revid=scw.input_scwid.str()[:4]
+            except AttributeError:
+                revid=str(scw.input_scwid)[:4]
+
         else:
             t1,t2=5000,5000
             revid="0000"
