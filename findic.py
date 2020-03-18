@@ -9,6 +9,8 @@ import ast
 import ddosa
 import dataanalysis.core as da
 
+class NoValidIC(ddosa.da.AnalysisException):
+    pass
 
 class ICIndexEntry(ddosa.DataAnalysis):
     ds = "UNDEFINED"
@@ -84,6 +86,10 @@ class FindICIndexEntry(ddosa.DataAnalysis):
 
         m_on = (idx['VSTART'] < t1) & (idx['VSTOP'] > t2) & (idx['VERSION'] == self.icversion)
         print("found valid:", sum(m_on))
+
+        if sum(m_on)==0:
+            raise NoValidIC("for range: %.10lg - %.10lg"%(t1, t2))
+
         print(idx[m_on])
         order = np.argsort(idx[m_on]['VSTART'])
         member_location_rel = idx[m_on]['MEMBER_LOCATION'][order[-1]]
