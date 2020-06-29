@@ -78,7 +78,7 @@ class FindICIndexEntry(ddosa.DataAnalysis):
         idxfn = icroot + "/idx/ic/" + self.ds + "-IDX.fits"
         print("idx:", idxfn)
 
-        idx_hash=hashtools.shhash(open(idxfn).read())[:8]
+        idx_hash=hashtools.shhash(open(idxfn, 'rb').read().decode(errors="ignore"))[:8]
 
         idx = fits.open(idxfn)[1].data
 
