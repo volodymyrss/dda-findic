@@ -40,6 +40,8 @@ class ICIndexEntry(ddosa.DataAnalysis):
         return v
 
 class FindICIndexEntry(ddosa.DataAnalysis):
+    input_icroot=ddosa.ICRoot
+
     ds = None
     icversion = 1
     version_from_index=True
@@ -55,7 +57,8 @@ class FindICIndexEntry(ddosa.DataAnalysis):
 
     @property
     def ic_version(self):
-        icroot=os.environ['CURRENT_IC']
+        icroot=self.input_icroot.icroot
+        #icroot=os.environ['CURRENT_IC']
         ic_version_code=icroot+"/ic_version.yaml"
 
         if os.path.exists(ic_version_code):
@@ -74,7 +77,8 @@ class FindICIndexEntry(ddosa.DataAnalysis):
             t1,t2=5000,5000
             revid="0000"
 
-        icroot=os.environ['CURRENT_IC']
+        #icroot=os.environ['CURRENT_IC']
+        icroot=self.input_icroot.icroot
         idxfn = icroot + "/idx/ic/" + self.ds + "-IDX.fits"
         print("idx:", idxfn)
 
