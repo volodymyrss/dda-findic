@@ -39,12 +39,23 @@ class ICIndexEntry(ddosa.DataAnalysis):
 
         return v
 
-class FindICIndexEntry(ddosa.DataAnalysis):
-    input_icroot=ddosa.ICRoot
+       # icroot = self.icroot
 
+        #icroot=os.environ['CURRENT_IC']
+       # ic_version_code=icroot+"/ic_version.yaml"
+
+       # if os.path.exists(ic_version_code):
+       #     ic_version=yaml.load(open(ic_version_code))
+      #  else:
+       #     ic_version=dict(version_id=os.path.basename(icroot))
+
+       # return ic_version['version_id']
+
+class FindICIndexEntry(ddosa.DataAnalysis):
     ds = None
     icversion = 1
     version_from_index=True
+    input_icroot=ddosa.ICRoot
 
  #   run_for_hashe = True
 
@@ -53,20 +64,14 @@ class FindICIndexEntry(ddosa.DataAnalysis):
         return entry['member_location']
 
     def get_version(self):
-        return self.get_signature()+"."+self.version+"."+self.ic_version
+        return self.get_signature()+"."+self.version #+"."+self.ic_version
 
     @property
-    def ic_version(self):
-        icroot=self.input_icroot.icroot
+    def icroot(self):
         #icroot=os.environ['CURRENT_IC']
-        ic_version_code=icroot+"/ic_version.yaml"
-
-        if os.path.exists(ic_version_code):
-            ic_version=yaml.load(open(ic_version_code))
-        else:
-            ic_version=dict(version_id=os.path.basename(icroot))
-
-        return ic_version['version_id']
+        #i = ddosa.ICRoot()
+        #i.main()
+        return self.input_icroot.icroot
 
     def find_entry(self,scw):
 
@@ -77,8 +82,8 @@ class FindICIndexEntry(ddosa.DataAnalysis):
             t1,t2=5000,5000
             revid="0000"
 
-        #icroot=os.environ['CURRENT_IC']
-        icroot=self.input_icroot.icroot
+        icroot = self.icroot
+
         idxfn = icroot + "/idx/ic/" + self.ds + "-IDX.fits"
         print("idx:", idxfn)
 
