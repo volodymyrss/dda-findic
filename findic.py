@@ -82,6 +82,7 @@ class FindICIndexEntry(ddosa.DataAnalysis):
             t1,t2=5000,5000
             revid="0000"
 
+        print("calling find_entry with", scw, icroot_obj, self.input_icroot)
         icroot = (icroot_obj or self.input_icroot).icroot
 
         idxfn = icroot + "/idx/ic/" + self.ds + "-IDX.fits"
