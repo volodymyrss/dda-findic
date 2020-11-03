@@ -52,6 +52,8 @@ class ICIndexEntry(ddosa.DataAnalysis):
        # return ic_version['version_id']
 
 class FindICIndexEntry(ddosa.DataAnalysis):
+    input_icroot=ddosa.ICRoot
+
     ds = None
     icversion = 1
     version_from_index=True
@@ -91,7 +93,8 @@ class FindICIndexEntry(ddosa.DataAnalysis):
 
         idx = fits.open(idxfn)[1].data
 
-        print(t1,t2,zip(idx['VSTART'],idx['VSTOP']))
+        for v1, v2, vv in zip(idx['VSTART'],idx['VSTOP'],idx['VERSION']):
+            print("requested:", t1, t2, self.icversion, "valid in IC:", v1, v2, vv)
 
         m_on = (idx['VSTART'] < t1) & (idx['VSTOP'] > t2) & (idx['VERSION'] == self.icversion)
         print("found valid:", sum(m_on))
