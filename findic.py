@@ -52,8 +52,6 @@ class ICIndexEntry(ddosa.DataAnalysis):
        # return ic_version['version_id']
 
 class FindICIndexEntry(ddosa.DataAnalysis):
-    input_icroot=ddosa.ICRoot
-
     ds = None
     icversion = 1
     version_from_index=True
@@ -73,7 +71,12 @@ class FindICIndexEntry(ddosa.DataAnalysis):
         #icroot=os.environ['CURRENT_IC']
         #i = ddosa.ICRoot()
         #i.main()
-        return self.input_icroot.icroot
+
+        try:
+            return self.input_icroot.icroot
+        except Exception as e:
+            print(f"\033[31mproblem to get icroot self {self} input_icroot {self.input_icroot} \033[0m")
+            raise
 
     def find_entry(self,scw):
 
