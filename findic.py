@@ -52,8 +52,6 @@ class ICIndexEntry(ddosa.DataAnalysis):
        # return ic_version['version_id']
 
 class FindICIndexEntry(ddosa.DataAnalysis):
-    input_icroot=ddosa.ICRoot
-
     ds = None
     icversion = 1
     version_from_index=True
@@ -61,21 +59,21 @@ class FindICIndexEntry(ddosa.DataAnalysis):
 
  #   run_for_hashe = True
 
-    def get_member_location(self,scw=None):
-        entry=self.find_entry(scw)
+    def get_member_location(self,scw=None, icroot_obj=None):
+        entry=self.find_entry(scw, icroot_obj=icroot_obj)
         return entry['member_location']
 
     def get_version(self):
         return self.get_signature()+"."+self.version #+"."+self.ic_version
 
-    @property
-    def icroot(self):
+    #@property
+    #def icroot(self):
         #icroot=os.environ['CURRENT_IC']
         #i = ddosa.ICRoot()
         #i.main()
-        return self.input_icroot.icroot
+    #    return self.input_icroot.icroot
 
-    def find_entry(self,scw):
+    def find_entry(self, scw, icroot_obj=None):
 
         if scw is not None:
             t1, t2 = scw.get_t1_t2()
@@ -84,7 +82,7 @@ class FindICIndexEntry(ddosa.DataAnalysis):
             t1,t2=5000,5000
             revid="0000"
 
-        icroot = self.icroot
+        icroot = (icroot_obj or self.input_icroot).icroot
 
         idxfn = icroot + "/idx/ic/" + self.ds + "-IDX.fits"
         print("idx:", idxfn)
