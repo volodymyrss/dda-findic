@@ -16,7 +16,7 @@ class ICIndexEntry(ddosa.DataAnalysis):
     ds = "UNDEFINED"
     idx_hash="UNDEFINED"
     hashe = None
-    version_from_index=True
+    version_from_index=False
 
     def get_version(self):
         if self.version_from_index:
@@ -38,6 +38,9 @@ class ICIndexEntry(ddosa.DataAnalysis):
             self.factory.note_factorization(note)
 
         return v
+        
+    def get_member_location(self, scw=None):
+        return self.member_location
 
        # icroot = self.icroot
 
@@ -58,6 +61,7 @@ class FindICIndexEntry(ddosa.DataAnalysis):
     input_icroot=ddosa.ICRoot
 
  #   run_for_hashe = True
+    #version_from_index=False
 
     def get_member_location(self,scw=None, icroot_obj=None):
         entry=self.find_entry(scw, icroot_obj=icroot_obj)
@@ -88,7 +92,11 @@ class FindICIndexEntry(ddosa.DataAnalysis):
         idxfn = icroot + "/idx/ic/" + self.ds + "-IDX.fits"
         print("idx:", idxfn)
 
-        idx_hash=hashtools.shhash(open(idxfn, 'rb').read().decode(errors="ignore"))[:8]
+        try:
+            idx_hash=hashtools.shhash(open(idxfn).read())[:8]
+        except Exception as e:
+            print("problem reading this:", idxfn)
+            raise
 
         idx = fits.open(idxfn)[1].data
 
@@ -127,7 +135,7 @@ class FindICIndexEntry(ddosa.DataAnalysis):
                     ic_hashe_norev=hashtools.hashe_replace_object(ic_hashe,rev_hashe,'')
                     print("norev hashe",ic_hashe_norev)
                 else:
-                    print("unable to convert version file")
+                    print("unable to extract revhashe ",rev_hashe,"from version file",ic_hashe)
 
                 return dict(hashe=ic_hashe, ds=self.ds, member_location=member_location, idx_hash=idx_hash, idxfn=idxfn)
             except IOError as e:
