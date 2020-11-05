@@ -93,7 +93,7 @@ class FindICIndexEntry(ddosa.DataAnalysis):
         print("idx:", idxfn)
 
         try:
-            idx_hash=hashtools.shhash(open(idxfn).read())[:8]
+            idx_hash=hashtools.shhash(open(idxfn, "rb").read())[:8]
         except Exception as e:
             print("problem reading this:", idxfn)
             raise
