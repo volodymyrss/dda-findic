@@ -55,7 +55,7 @@ class FindICIndexEntry(ddosa.DataAnalysis):
 
     @property
     def ic_version(self):
-        icroot=os.environ['CURRENT_IC']
+        icroot=os.environ['CURRENT_IC'].strip("/")
         ic_version_code=icroot+"/ic_version.yaml"
 
         if os.path.exists(ic_version_code):
