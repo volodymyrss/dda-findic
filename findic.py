@@ -128,7 +128,8 @@ class FindICIndexEntry(ddosa.DataAnalysis):
             print("found hashe file at", version_fn)
 
             try:
-                ic_hashe = ast.literal_eval(open(version_fn).read())
+                version_f_content = open(version_fn).read()
+                ic_hashe = ast.literal_eval(version_f_content)
 
                 print("searching",ic_hashe,rev_hashe)
                 if hashtools.find_object(ic_hashe,rev_hashe):
@@ -137,7 +138,14 @@ class FindICIndexEntry(ddosa.DataAnalysis):
                 else:
                     print("unable to extract revhashe ",rev_hashe,"from version file",ic_hashe)
 
-                return dict(hashe=ic_hashe, ds=self.ds, member_location=member_location, idx_hash=idx_hash, idxfn=idxfn)
+                return dict(
+                    hashe=ic_hashe, 
+                    ds=self.ds, 
+                    member_location=member_location, 
+                    idx_hash=idx_hash, 
+                    idxfn=idxfn,
+                    icshhash=hashtools.shhash(ic_hashe)
+                )
             except IOError as e:
                 print("unable to read version file, skipping",e)
             except SyntaxError as e:
