@@ -107,7 +107,7 @@ class FindICIndexEntry(ddosa.DataAnalysis):
         print("found valid:", sum(m_on))
 
         if sum(m_on)==0:
-            raise NoValidIC("for range: %.10lg - %.10lg"%(t1, t2))
+            raise NoValidIC("for range: %.10lg - %.10lg; have from %.10lg to %.10lg"%(t1, t2, min(idx['VSTART']), max(idx['VSTOP'])))
 
         print(idx[m_on])
         order = np.argsort(idx[m_on]['VSTART'])
