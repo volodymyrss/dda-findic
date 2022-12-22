@@ -63,6 +63,28 @@ class FindICIndexEntry(ddosa.DataAnalysis):
  #   run_for_hashe = True
     #version_from_index=False
 
+    def get_icversion(self):
+        if "t20221103_osa11.2" not in self.input_icroot.ic_root_version:
+            icversion = self.icversion
+            print("using pre-set icversion", icversion)
+        else:
+            print("will use computed icversion")
+            if (icversion:=getattr(self, '_icversion', None)) is not None:
+                print("already computed icversion:", icversion)
+            else:
+                print("will derive icversion from memonic")
+                master_file = fits.open(self.input_icroot.icroot + "/idx/ic/ic_master_file.fits")
+                print(master_file[2].data)
+                print(master_file[3].data)
+                m_row = master_file[3].data[master_file[3].data['MNEMONIC'] == "OSA"]
+                print("m_row", m_row)
+                print("m_row", master_file[3].data.columns)
+                self._icversion = m_row[self.ds.replace(".", "").replace("-", "_")]
+                icversion = self._icversion
+
+        return icversion
+
+
     def get_member_location(self,scw=None, icroot_obj=None):
         entry=self.find_entry(scw, icroot_obj=icroot_obj)
         return entry['member_location']
@@ -101,9 +123,9 @@ class FindICIndexEntry(ddosa.DataAnalysis):
         idx = fits.open(idxfn)[1].data
 
         for v1, v2, vv in zip(idx['VSTART'],idx['VSTOP'],idx['VERSION']):
-            print("requested:", t1, t2, self.icversion, "valid in IC:", v1, v2, vv)
+            print("requested:", t1, t2, self.get_icversion(), "valid in IC:", v1, v2, vv)
 
-        m_on = (idx['VSTART'] < t1) & (idx['VSTOP'] > t2) & (idx['VERSION'] == self.icversion)
+        m_on = (idx['VSTART'] < t1) & (idx['VSTOP'] > t2) & (idx['VERSION'] == self.get_icversion())
         print("found valid:", sum(m_on))
 
         if sum(m_on)==0:
