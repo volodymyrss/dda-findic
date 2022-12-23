@@ -64,7 +64,7 @@ class FindICIndexEntry(ddosa.DataAnalysis):
     #version_from_index=False
 
     def get_icversion(self, icroot):
-        if "t20221103_osa11.2" not in icroot.ic_root_version:
+        if "t20221103_osa11.2" not in icroot:
             icversion = self.icversion
             print("using pre-set icversion", icversion)
         else:
@@ -73,7 +73,7 @@ class FindICIndexEntry(ddosa.DataAnalysis):
                 print("already computed icversion:", icversion)
             else:
                 print("will derive icversion from memonic")
-                master_file = fits.open(self.input_icroot.icroot + "/idx/ic/ic_master_file.fits")
+                master_file = fits.open(icroot + "/idx/ic/ic_master_file.fits")
                 print(master_file[2].data)
                 print(master_file[3].data)
                 m_row = master_file[3].data[master_file[3].data['MNEMONIC'] == "OSA"]
