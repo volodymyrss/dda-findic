@@ -63,8 +63,8 @@ class FindICIndexEntry(ddosa.DataAnalysis):
  #   run_for_hashe = True
     #version_from_index=False
 
-    def get_icversion(self):
-        if "t20221103_osa11.2" not in self.input_icroot.ic_root_version:
+    def get_icversion(self, icroot):
+        if "t20221103_osa11.2" not in icroot.ic_root_version:
             icversion = self.icversion
             print("using pre-set icversion", icversion)
         else:
@@ -123,9 +123,9 @@ class FindICIndexEntry(ddosa.DataAnalysis):
         idx = fits.open(idxfn)[1].data
 
         for v1, v2, vv in zip(idx['VSTART'],idx['VSTOP'],idx['VERSION']):
-            print("requested:", t1, t2, self.get_icversion(), "valid in IC:", v1, v2, vv)
+            print("requested:", t1, t2, self.get_icversion(icroot), "valid in IC:", v1, v2, vv)
 
-        m_on = (idx['VSTART'] < t1) & (idx['VSTOP'] > t2) & (idx['VERSION'] == self.get_icversion())
+        m_on = (idx['VSTART'] < t1) & (idx['VSTOP'] > t2) & (idx['VERSION'] == self.get_icversion(icroot))
         print("found valid:", sum(m_on))
 
         if sum(m_on)==0:
